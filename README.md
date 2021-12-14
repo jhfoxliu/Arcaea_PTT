@@ -3,5 +3,6 @@
 
 # 需求：
 python3[https://www.python.org/downloads/windows/]，下载后安装
-plotly  （使用 'pip install plotly' 安装）
+
+plotly  （使用 `pip install plotly` 安装）
 
