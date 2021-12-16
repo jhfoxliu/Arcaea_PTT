@@ -4,6 +4,10 @@
 # 需求：
 python3[https://www.python.org/downloads/windows/] ，下载后安装
 
+pandas （使用 `pip install pandas` 安装）
+
+numpy （使用 `pip install numpy` 安装）
+
 plotly  （使用 `pip install plotly` 安装）
 
 # 示例：
