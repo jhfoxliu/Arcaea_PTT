@@ -5,10 +5,14 @@ import numpy as np
 import time
 recent_ptt = 11.13  # 输入您的ptt
 file_name  = "Arcaea.csv"  # 这里改文件名
-# 改用参数输入
+unit_int = True  # Ture - y轴用整数； False - y轴用Million表示
+save_html = False  # True - 存档到 [文件名][日期].html；Flase - 不存档
+
+# 改用参数输入文件名
 # file_name = sys.argv[1]
 
 localtime = time.asctime(time.localtime(time.time()))
+html_name = "{}_{}.html".format(file_name.replace(".csv", ""), time.strftime("%Y%m%d_%H_%M", time.localtime()))
 
 def cal_ptt(row):
 	score = row["分数"]
@@ -82,11 +86,12 @@ import plotly.express as px
 # plt.tight_layout()
 # plt.show()
 
+df["排序"] = df.index
 df = df.sort_values(by=["难度", "定数" ], ascending=[True, True])
 
 fig = px.scatter(df,
                  title="您 ptt={}, B30={}, R10={}<br>日期：{}".format(recent_ptt, B30, R10, localtime),
-                 x="定数", y="分数",  color="难度", hover_data=["曲目", "曲师", "评级", "ptt"], # symbol="评级",
+                 x="定数", y="分数",  color="难度", hover_data=["曲目", "曲师", "评级", "ptt", "排序"], # symbol="评级",
 				 color_discrete_map={"BYD":"maroon", "FTR": "dodgerblue", "PRS": "limegreen"},
 				 template="simple_white",
 				 )
@@ -102,6 +107,11 @@ fig.update_layout(
 		xaxis={"autorange": False, "range":[df["定数"].min()-0.05, df["定数"].max()+0.05]},
 
 )
+
+if unit_int == True:
+	fig.update_layout(yaxis=dict(tickformat="int"))
+
+
 # fig.add_shape( # add a horizontal "target" line
 #     type="line", line_color="black", line_width=2, opacity=1,
 #     x0=0, x1=1, xref="paper", y0=10000000, y1=10000000, yref="y"
@@ -126,3 +136,6 @@ fig.add_shape( # add a horizontal "target" line
 # )
 
 fig.show()
+
+if save_html == True:
+	fig.write_html(html_name)
