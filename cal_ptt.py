@@ -3,6 +3,7 @@ import sys
 import pandas as pd
 import numpy as np
 import time
+
 recent_ptt = 11.13  # 输入您的ptt
 file_name  = "Arcaea.csv"  # 这里改文件名
 unit_int = True  # Ture - y轴用整数； False - y轴用Million表示
@@ -12,7 +13,7 @@ save_html = False  # True - 存档到 [文件名][日期].html；Flase - 不存�
 # file_name = sys.argv[1]
 
 localtime = time.asctime(time.localtime(time.time()))
-html_name = "{}_{}.html".format(file_name.replace(".csv", ""), time.strftime("%Y%m%d_%H_%M", time.localtime()))
+html_name = "{}_{}.html".format(file_name.replace(".csv", "").replace(".xls", "").replace(".xlsx", ""), time.strftime("%Y%m%d_%H_%M", time.localtime()))
 
 def cal_ptt(row):
 	score = row["分数"]
@@ -48,9 +49,47 @@ def cal_rank(row):
 		return "D"
 
 # df = pd.read_csv(sys.argv[1], header=0, index_col=0)
-df = pd.read_csv(file_name, header=0, index_col=0)
+if file_name.endswith(".csv"):
+	df = pd.read_csv(file_name, header=0, index_col=0)
+else:
+    	raise(IOError("请您提供一个csv 0.0\nExcel文件计划中。。"))
+'''
+elif file_name.endswith(".xlsx"):
+	df = pd.read_excel(file_name, header=0, index_col=0, sheet_name=0, engine="openpyxl")
+elif file_name.endswith(".xls"):
+	df = pd.read_excel(file_name, header=0, index_col=0, sheet_name=None, engine="xlrd")
+'''
+
+
 # df.to_csv(sys.argv[1].replace(".csv", ".old.csv"))
-df.to_csv(file_name.replace(".csv", ".old.csv"), encoding="utf-8-sig")
+if file_name.endswith(".csv"):
+	df.to_csv(file_name.replace(".csv", ".old.csv"), encoding="utf-8-sig")
+'''
+elif file_name.endswith(".xlsx"):
+	df.to_excel(file_name.replace(".xlsx", ".old.xlsx"))
+elif file_name.endswith(".xls"):
+	df.to_excel(file_name.replace(".xls", ".old.xls"))
+'''
+import warnings
+if "分数" not in df.columns:
+	raise(ValueError("需要增加一列 分数"))
+if "定数" not in df.columns:
+	raise(ValueError("需要增加一列 定数"))
+
+if "曲目" not in df.columns:
+	sys.stderr.write("需要增加一列 曲目 暂时以NaN代替 (这样真的好吗。。)\n")
+	df["曲目"] = None
+if "曲师" not in df.columns:
+	sys.stderr.write("需要增加一列 曲师 暂时以NaN代替\n")
+	df["曲师"] = None
+if "难度" not in df.columns:
+	sys.stderr.write("需要增加一列 难度 暂时以unknown代替\n")
+	df["难度"] = "unknown"
+df["难度"].fillna("unknown")
+df["曲师"].fillna("NaN")
+df["曲目"].fillna("NaN")
+
+
 df["ptt"] = df.apply(cal_ptt, axis=1)
 df = df.sort_values(by="ptt", ascending=False)
 df.index = np.arange(1, len(df) + 1)
@@ -92,7 +131,7 @@ df = df.sort_values(by=["难度", "定数" ], ascending=[True, True])
 fig = px.scatter(df,
                  title="您 ptt={}, B30={}, R10={}<br>日期：{}".format(recent_ptt, B30, R10, localtime),
                  x="定数", y="分数",  color="难度", hover_data=["曲目", "曲师", "评级", "ptt", "排序"], # symbol="评级",
-				 color_discrete_map={"BYD":"maroon", "FTR": "dodgerblue", "PRS": "limegreen"},
+				 color_discrete_map={"BYD":"maroon", "FTR": "dodgerblue", "PRS": "limegreen", "unknown": "gray"},
 				 template="simple_white",
 				 )
 fig.update_layout(
