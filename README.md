@@ -1,6 +1,15 @@
 # Arcaea_PTT
 查分器老是跪？不要紧，我们用python撸一个！
 
+# 特性：
+
+（1）计算表中的PTT（PTT单位可以用整数或者Million表示）
+
+（2）画一个可以互动的定数-PTT散点图（可互动）
+
+（3）存档散点图到HTML
+
+
 # 需求：
 python3[https://www.python.org/downloads/windows/] ，下载后安装
 
