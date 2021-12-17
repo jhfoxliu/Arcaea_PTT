@@ -21,7 +21,7 @@ plotly  （使用 `pip install plotly` 安装）
 
 # 示例：
 生成Arcaea.csv文件（用Excel），查分器[https://redive.estertion.win/arcaea/probe/] 能用的话可以直接用它生成的表
-样表（可以参考附件）,画了红线的列是必须的：
+样表（可以参考附件）,画了红线的列是必须的(序号好像要加的样子，随便填，会自动排序的)：
 
 
 ![图片4](https://user-images.githubusercontent.com/20188476/145941453-44dde794-7d8d-4b32-8f38-a0f13ca598fa.png)
