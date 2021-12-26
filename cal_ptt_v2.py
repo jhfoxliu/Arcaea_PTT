@@ -91,7 +91,7 @@ elif file_name.endswith(".xls"):
 
 # df.to_csv(sys.argv[1].replace(".csv", ".old.csv"))
 if file_name.endswith(".csv"):
-	df.to_csv(file_name.replace(".csv", ".old.csv"), encoding="utf-8-sig")
+	df.to_csv(file_name_old, encoding="utf-8-sig")
 '''
 elif file_name.endswith(".xlsx"):
 	df.to_excel(file_name.replace(".xlsx", ".old.xlsx"))
